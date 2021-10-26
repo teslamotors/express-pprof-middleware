@@ -21,5 +21,5 @@ app.use(pprof);
 
 ### Getting a heap profile:
 ```
-curl http://localhost:8000/debug/pprof -o heap.pb.gz
+curl http://localhost:8000/debug/pprof/heap -o heap.pb.gz
 ```
