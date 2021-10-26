@@ -1,6 +1,6 @@
 {
   "name": "express-pprof-middleware",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Express middleware that exposes pprof endpoints for easy profiling",
   "main": "index.js",
   "devDependencies": {
@@ -22,7 +22,7 @@
     "supertest": "3.3.0"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --timeout 5000",
     "lint": "npm run prettier && npm run eslint",
     "eslint": "eslint .",
     "start": "npm test"

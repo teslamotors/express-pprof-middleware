@@ -8,7 +8,7 @@ npm i -S express-pprof-middleware
 
 ## Support Profiles
 * Heap 
-* CPU (coming soon)
+* Wall Time
 
 ## Usage
 
@@ -22,4 +22,9 @@ app.use(pprof);
 ### Getting a heap profile:
 ```
 curl http://localhost:8000/debug/pprof/heap -o heap.pb.gz
+```
+
+### Getting a wall time profile:
+```
+curl http://localhost:8000/debug/pprof/wall?seconds=5 -o wall.pb.gz
 ```

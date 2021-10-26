@@ -1,4 +1,3 @@
-const assert = require('assert');
 const { expect } = require('chai');
 
 describe('module main file - index.js', () => {
@@ -7,13 +6,30 @@ describe('module main file - index.js', () => {
     });
 });
 
-describe('heap - index.js', () => {
-  it('should be correctly created and called', (done) => {
+describe('heap profile', () => {
+  it('should be correctly created and called', async () => {
     const middleware = require('../index');
     expect(middleware).to.be.instanceof(Function);
-    const req = { get: () => {path: '/debug/pprof/heap'} };
-    const res = { set: () => {} };
 
-    middleware(req, res, done);
+    let heapFilePath = '';
+    const req = { get: () => {}, path: '/debug/pprof/heap' };
+    const res = { set: () => {}, sendFile: (file) => {heapFilePath = file} };
+
+    await middleware(req, res, () => {});
+    expect(heapFilePath).to.equal('/tmp/heap.pb.gz');
+  });
+});
+
+describe('wall profile', () => {
+  it('should be correctly created and called', async () => {
+    const middleware = require('../index');
+    expect(middleware).to.be.instanceof(Function);
+
+    let wallFilePath = '';
+    const req = { get: () => {}, path: '/debug/pprof/wall', query: {seconds: 1}};
+    const res = { set: () => {}, sendFile: (file) => {wallFilePath = file} };
+
+    await middleware(req, res, () => {});
+    expect(wallFilePath).to.equal('/tmp/wall.pb.gz');
   });
 });
