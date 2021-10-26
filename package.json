@@ -1,0 +1,45 @@
+{
+  "name": "express-pprof-middleware",
+  "version": "0.0.1",
+  "description": "Express middleware that exposes pprof endpoints for easy profiling",
+  "main": "index.js",
+  "devDependencies": {
+    "chai": "~3.5.0",
+    "co-mocha": "1.2.2",
+    "coveralls": "3.0.2",
+    "eslint": "4.18.0",
+    "eslint-config-airbnb": "16.1.0",
+    "eslint-config-cp": "5.3.0",
+    "eslint-config-prettier": "3.0.1",
+    "eslint-plugin-import": "2.8.0",
+    "eslint-plugin-metrics": "1.0.4",
+    "express": "^4.14.0",
+    "is-path-in-cwd": "^2.0.0",
+    "istanbul": "~0.4.2",
+    "mocha": "5.2.0",
+    "mocha-lcov-reporter": "~1.0.0",
+    "sinon": "4.4.2",
+    "supertest": "3.3.0"
+  },
+  "scripts": {
+    "test": "mocha",
+    "lint": "npm run prettier && npm run eslint",
+    "eslint": "eslint .",
+    "start": "npm test"
+  },
+  "keywords": [
+    "express",
+    "pprof",
+    "middleware"
+  ],
+  "homepage": "https://github.com/teslamotors/express-pprof-middleware",
+  "author": "Leon Li",
+  "license": "MIT",
+  "dependencies": {
+    "pprof": "^3.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/teslamotors/express-pprof-middleware.git"
+  }
+}
