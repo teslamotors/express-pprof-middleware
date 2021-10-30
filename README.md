@@ -6,7 +6,7 @@ Express middleware that exposes pprof endpoints for easy profiling
 npm i -S express-pprof-middleware
 ```
 
-## Support Profiles
+## Supported Profiles
 * Heap 
 * Wall Time
 

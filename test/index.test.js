@@ -33,3 +33,18 @@ describe('wall profile', () => {
     expect(wallFilePath).to.equal('/tmp/wall.pb.gz');
   });
 });
+
+
+describe('heap stop', () => {
+  it('should be correctly created and called', async () => {
+    const middleware = require('../index');
+    expect(middleware).to.be.instanceof(Function);
+
+    let sendResult = '';
+    const req = { get: () => {}, path: '/debug/pprof/heap/stop'};
+    const res = { set: () => {}, send: (msg) => {sendResult = msg} };
+
+    await middleware(req, res, () => {});
+    expect(sendResult).to.equal('');
+  });
+});
