@@ -1,6 +1,6 @@
 {
   "name": "express-pprof-middleware",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Express middleware that exposes pprof endpoints for easy profiling",
   "main": "index.js",
   "devDependencies": {
@@ -17,9 +17,7 @@
     "is-path-in-cwd": "^2.0.0",
     "istanbul": "~0.4.2",
     "mocha": "5.2.0",
-    "mocha-lcov-reporter": "~1.0.0",
-    "sinon": "4.4.2",
-    "supertest": "3.3.0"
+    "mocha-lcov-reporter": "~1.0.0"
   },
   "scripts": {
     "test": "mocha --timeout 5000",
