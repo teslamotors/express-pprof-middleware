@@ -1,6 +1,6 @@
 {
   "name": "express-pprof-middleware",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Express middleware that exposes pprof endpoints for easy profiling",
   "main": "index.js",
   "devDependencies": {

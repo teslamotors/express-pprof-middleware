@@ -47,6 +47,7 @@ const middleware = async (req, res, next) => {
         case heapStopPath:
             try {
                 pprof.heap.stop();
+                res.send('');
             } catch (err) {
                 res.status(500).send(err.message);
                 return;
