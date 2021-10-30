@@ -5,11 +5,20 @@ const heapFilePath = '/tmp/heap.pb.gz';
 const wallFilePath = '/tmp/wall.pb.gz'
 
 const heapWebPath = '/debug/pprof/heap';
+const heapStopPath = '/debug/pprof/heap/stop';
 const wallWebPath = '/debug/pprof/wall';
 
-// Heap Profiler
-pprof.heap.start(512 * 1024, 64);
+const intervalBytes = 512 * 1024;
+const stackDepth = 64;
 
+// Start Heap Profiler
+pprof.heap.start(intervalBytes, stackDepth);
+
+/**
+ * @param  {Object} req
+ * @param  {Object} res
+ * @param  {Function} next
+ */
 const middleware = async (req, res, next) => {
     switch(req.path) {
         case heapWebPath:
@@ -35,13 +44,27 @@ const middleware = async (req, res, next) => {
             }
             res.sendFile(wallFilePath);
             return;
+        case heapStopPath:
+            try {
+                pprof.heap.stop();
+            } catch (err) {
+                res.status(500).send(err.message);
+                return;
+            }
+            return;
         default:
             break;
     }
-    return next();
+    next();
 };
 
+/**
+ * @param  {string} outPath - output path for the heap protobuf output
+ */
 const heap = async (outPath) => {
+    try {
+        pprof.heap.start(intervalBytes, stackDepth);
+    } catch {}
     const profile = await pprof.heap.profile();
     const buf = await pprof.encode(profile);
     return new Promise((resolve, reject) => {
@@ -55,6 +78,10 @@ const heap = async (outPath) => {
     });
 };
 
+/**
+ * @param  {string} outPath - output path for the heap protobuf output
+ * @param  {number} durationMillis - sampling duration
+ */
 const wall = async (outPath, durationMillis) => {
     const profile = await pprof.time.profile({
         durationMillis: durationMillis,
