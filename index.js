@@ -33,9 +33,11 @@ const middleware = async (req, res, next) => {
         case wallWebPath:
             try {
                 let millis = 5000;
-                const secs = parseInt(req.query?.seconds, 10);
-                if (!Number.isNaN(secs) && secs > 0) {
-                    millis = secs * 1000;
+                if (req.query.seconds) {
+                    const secs = parseInt(req.query.seconds, 10);
+                    if (!Number.isNaN(secs) && secs > 0) {
+                        millis = secs * 1000;
+                    }
                 }
                 await wall(wallFilePath, millis);
             } catch (err) {

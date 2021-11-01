@@ -1,6 +1,6 @@
 {
   "name": "express-pprof-middleware",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Express middleware that exposes pprof endpoints for easy profiling",
   "main": "index.js",
   "devDependencies": {
@@ -28,7 +28,9 @@
   "keywords": [
     "express",
     "pprof",
-    "middleware"
+    "middleware",
+    "heap",
+    "profiling"
   ],
   "homepage": "https://github.com/teslamotors/express-pprof-middleware",
   "author": "Leon Li",
