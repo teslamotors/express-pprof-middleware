@@ -28,8 +28,7 @@ const middleware = async (req, res, next) => {
                 res.status(500).send(err.message);
                 return;
             }
-            res.sendFile(heapFilePath);
-            return;
+            return res.sendFile(heapFilePath);
         case wallWebPath:
             try {
                 let millis = 5000;
@@ -41,18 +40,15 @@ const middleware = async (req, res, next) => {
                 }
                 await wall(wallFilePath, millis);
             } catch (err) {
-                res.status(500).send(err.message);
-                return;
+                return res.status(500).send(err.message);
             }
-            res.sendFile(wallFilePath);
-            return;
+            return res.sendFile(wallFilePath);
         case heapStopPath:
             try {
                 pprof.heap.stop();
                 res.send('');
             } catch (err) {
-                res.status(500).send(err.message);
-                return;
+                return res.status(500).send(err.message);
             }
             return;
         default:
