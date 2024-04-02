@@ -2,7 +2,7 @@ const pprof = require('pprof');
 const fs = require('fs');
 
 const heapFilePath = '/tmp/heap.pb.gz';
-const wallFilePath = '/tmp/wall.pb.gz'
+const wallFilePath = '/tmp/wall.pb.gz';
 
 const heapWebPath = '/debug/pprof/heap';
 const heapStopPath = '/debug/pprof/heap/stop';
@@ -20,61 +20,58 @@ pprof.heap.start(intervalBytes, stackDepth);
  * @param  {Function} next
  */
 const middleware = async (req, res, next) => {
-    switch(req.path) {
-        case heapWebPath:
-            try {
-                await heap(heapFilePath);
-            } catch (err) {
-                res.status(500).send(err.message);
-                return;
-            }
-            return res.sendFile(heapFilePath);
-        case wallWebPath:
-            try {
-                let millis = 5000;
-                if (req.query.seconds) {
-                    const secs = parseInt(req.query.seconds, 10);
-                    if (!Number.isNaN(secs) && secs > 0) {
-                        millis = secs * 1000;
-                    }
-                }
-                await wall(wallFilePath, millis);
-            } catch (err) {
-                return res.status(500).send(err.message);
-            }
-            return res.sendFile(wallFilePath);
-        case heapStopPath:
-            try {
-                pprof.heap.stop();
-                res.send('');
-            } catch (err) {
-                return res.status(500).send(err.message);
-            }
-            return;
-        default:
-            break;
-    }
-    next();
+  switch (req.path) {
+    case heapWebPath:
+      try {
+        await heap(heapFilePath);
+      } catch (err) {
+        return res.status(500).send(err.message);
+      }
+      return res.sendFile(heapFilePath);
+    case wallWebPath:
+      try {
+        let millis = 5000;
+        if (req.query.seconds) {
+          const secs = parseInt(req.query.seconds, 10);
+          if (!Number.isNaN(secs) && secs > 0) {
+            millis = secs * 1000;
+          }
+        }
+        await wall(wallFilePath, millis);
+      } catch (err) {
+        return res.status(500).send(err.message);
+      }
+      return res.sendFile(wallFilePath);
+    case heapStopPath:
+      try {
+        pprof.heap.stop();
+        return res.send('');
+      } catch (err) {
+        return res.status(500).send(err.message);
+      }
+    default:
+      return next();
+  }
 };
 
 /**
  * @param  {string} outPath - output path for the heap protobuf output
  */
 const heap = async (outPath) => {
-    try {
-        pprof.heap.start(intervalBytes, stackDepth);
-    } catch {}
-    const profile = await pprof.heap.profile();
-    const buf = await pprof.encode(profile);
-    return new Promise((resolve, reject) => {
-        fs.writeFile(outPath, buf, (err) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve();
-            }
-        });
+  try {
+    pprof.heap.start(intervalBytes, stackDepth);
+  } catch { }
+  const profile = await pprof.heap.profile();
+  const buf = await pprof.encode(profile);
+  return new Promise((resolve, reject) => {
+    fs.writeFile(outPath, buf, (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
     });
+  });
 };
 
 /**
@@ -82,19 +79,19 @@ const heap = async (outPath) => {
  * @param  {number} durationMillis - sampling duration
  */
 const wall = async (outPath, durationMillis) => {
-    const profile = await pprof.time.profile({
-        durationMillis: durationMillis,
+  const profile = await pprof.time.profile({
+    durationMillis,
+  });
+  const buf = await pprof.encode(profile);
+  return new Promise((resolve, reject) => {
+    fs.writeFile(outPath, buf, (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
     });
-    const buf = await pprof.encode(profile);
-    return new Promise((resolve, reject) => {
-        fs.writeFile(outPath, buf, (err) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve();
-            }
-        });
-    });
-}
+  });
+};
 
 module.exports = middleware;
