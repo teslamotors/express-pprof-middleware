@@ -28,3 +28,20 @@ curl http://localhost:8000/debug/pprof/heap -o heap.pb.gz
 ```
 curl http://localhost:8000/debug/pprof/wall?seconds=5 -o wall.pb.gz
 ```
+
+## Viewing Profiles
+Full details on the pprof tool here: https://github.com/google/pprof
+### Installing pprof:
+```
+go install github.com/google/pprof@latest
+```
+
+### Viewing a profile in graph format:
+```
+pprof -web heap.gz
+```
+
+### Viewing on an interactive web interface:
+```
+pprof -http=":" heap.gz
+```
