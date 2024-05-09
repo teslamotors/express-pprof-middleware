@@ -2,13 +2,13 @@ const { expect } = require('chai');
 
 describe('module main file - index.js', () => {
   it('should call without error', () => {
-    require('../index');
+    require('../src/index');
   });
 });
 
 describe('heap profile', () => {
   it('should be correctly created and called', async () => {
-    const middleware = require('../index');
+    const middleware = require('../src/index');
     expect(middleware).to.be.instanceof(Function);
 
     let heapFilePath = '';
@@ -22,7 +22,7 @@ describe('heap profile', () => {
 
 describe('wall profile', () => {
   it('should be correctly created and called', async () => {
-    const middleware = require('../index');
+    const middleware = require('../src/index');
     expect(middleware).to.be.instanceof(Function);
 
     let wallFilePath = '';
@@ -36,7 +36,7 @@ describe('wall profile', () => {
 
 describe('heap stop', () => {
   it('should be correctly created and called', async () => {
-    const middleware = require('../index');
+    const middleware = require('../src/index');
     expect(middleware).to.be.instanceof(Function);
 
     let sendResult = '';
