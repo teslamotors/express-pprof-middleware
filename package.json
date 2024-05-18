@@ -2,7 +2,7 @@
   "name": "express-pprof-middleware",
   "version": "0.0.8",
   "description": "Express middleware that exposes pprof endpoints for easy profiling",
-  "main": "index.js",
+  "main": "src/index.js",
   "devDependencies": {
     "chai": "~3.5.0",
     "co-mocha": "1.2.2",
