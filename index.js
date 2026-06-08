@@ -1,4 +1,4 @@
-const pprof = require('pprof');
+const pprof = require('@datadog/pprof');
 const fs = require('fs');
 
 const heapFilePath = '/tmp/heap.pb.gz';
