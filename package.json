@@ -3,6 +3,9 @@
   "version": "0.0.8",
   "description": "Express middleware that exposes pprof endpoints for easy profiling",
   "main": "index.js",
+  "engines": {
+    "node": ">=18"
+  },
   "devDependencies": {
     "chai": "~3.5.0",
     "co-mocha": "1.2.2",
@@ -32,7 +35,7 @@
   "author": "Leon Li",
   "license": "MIT",
   "dependencies": {
-    "pprof": "^3.2.0"
+    "@datadog/pprof": "^5.15.0"
   },
   "repository": {
     "type": "git",
