@@ -39,6 +39,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/teslamotors/express-pprof-middleware.git"
+    "url": "git+https://github.com/teslamotors/express-pprof-middleware.git"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   }
 }
