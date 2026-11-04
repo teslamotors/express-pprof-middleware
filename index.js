@@ -1,8 +1,10 @@
 const pprof = require('@datadog/pprof');
 const fs = require('fs');
+const os = require('os');
+const path = require('path');
 
-const heapFilePath = '/tmp/heap.pb.gz';
-const wallFilePath = '/tmp/wall.pb.gz';
+const heapFilePath = path.join(os.tmpdir(), 'heap.pb.gz');
+const wallFilePath = path.join(os.tmpdir(), 'wall.pb.gz');
 
 const heapWebPath = '/debug/pprof/heap';
 const heapStopPath = '/debug/pprof/heap/stop';
@@ -13,46 +15,6 @@ const stackDepth = 64;
 
 // Start Heap Profiler
 pprof.heap.start(intervalBytes, stackDepth);
-
-/**
- * @param  {Object} req
- * @param  {Object} res
- * @param  {Function} next
- */
-const middleware = async (req, res, next) => {
-  switch (req.path) {
-    case heapWebPath:
-      try {
-        await heap(heapFilePath);
-      } catch (err) {
-        return res.status(500).send(err.message);
-      }
-      return res.sendFile(heapFilePath);
-    case wallWebPath:
-      try {
-        let millis = 5000;
-        if (req.query.seconds) {
-          const secs = parseInt(req.query.seconds, 10);
-          if (!Number.isNaN(secs) && secs > 0) {
-            millis = secs * 1000;
-          }
-        }
-        await wall(wallFilePath, millis);
-      } catch (err) {
-        return res.status(500).send(err.message);
-      }
-      return res.sendFile(wallFilePath);
-    case heapStopPath:
-      try {
-        pprof.heap.stop();
-        return res.send('');
-      } catch (err) {
-        return res.status(500).send(err.message);
-      }
-    default:
-      return next();
-  }
-};
 
 /**
  * @param  {string} outPath - output path for the heap protobuf output
@@ -92,6 +54,54 @@ const wall = async (outPath, durationMillis) => {
       }
     });
   });
+};
+
+/**
+ * @param  {Object} req
+ * @param  {Object} res
+ * @param  {Function} next
+ */
+const middleware = async (req, res, next) => {
+  switch (req.path) {
+    case heapWebPath:
+      try {
+        await heap(heapFilePath);
+      } catch (err) {
+        return res.status(500).send(err.message);
+      }
+      return res.sendFile(heapFilePath, (err) => {
+        if (err && !res.headersSent && typeof next === 'function') {
+          next(err);
+        }
+      });
+    case wallWebPath:
+      try {
+        let millis = 5000;
+        if (req.query && req.query.seconds) {
+          const secs = parseInt(req.query.seconds, 10);
+          if (!Number.isNaN(secs) && secs > 0) {
+            millis = secs * 1000;
+          }
+        }
+        await wall(wallFilePath, millis);
+      } catch (err) {
+        return res.status(500).send(err.message);
+      }
+      return res.sendFile(wallFilePath, (err) => {
+        if (err && !res.headersSent && typeof next === 'function') {
+          next(err);
+        }
+      });
+    case heapStopPath:
+      try {
+        pprof.heap.stop();
+        return res.send('');
+      } catch (err) {
+        return res.status(500).send(err.message);
+      }
+    default:
+      return next();
+  }
 };
 
 module.exports = middleware;
